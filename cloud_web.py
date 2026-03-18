@@ -2,6 +2,8 @@ import streamlit as st
 import os
 import json
 import pandas as pd
+from docx import Document
+from io import BytesIO
 import plotly.express as px
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
@@ -62,28 +64,33 @@ with st.sidebar:
         st.session_state.show_chart = True
     
     if st.button("🧹 清空当前对话"):
-        st.markdown("---")
+       st.markdown("---")
     st.subheader("💾 学术资产保护")
-    
-    # 将对话记录打包成文科生最爱的 Markdown 格式
+
+    # 极客大招：直接在内存里生成原生的 Word 文档！
     if st.session_state.messages:
-        chat_export = "# 🌌 Geek AI 学术探讨记录\n\n"
+        # 1. 创建一个虚拟的 Word 文档
+        doc = Document()
+        doc.add_heading('🌌 Geek AI 学术探讨记录', 0)
+
+        # 2. 把聊天记录一行行写进 Word 里
         for msg in st.session_state.messages:
             role = "🧑‍🎓 你" if msg["role"] == "user" else "🤖 AI 助理"
-            chat_export += f"### {role}:\n{msg['content']}\n\n---\n"
-            
-        # 召唤下载按钮
-        st.download_button(
-            label="📥 一键导出本次文献分析笔记",
-            data=chat_export,
-            file_name="GeekAI_学术笔记.md",
-            mime="text/markdown",
-            help="关网页前记得点我！否则记忆会清空哦！"
-        )
-        st.session_state.messages = []
-        st.session_state.show_chart = False
-        st.rerun()
+            doc.add_heading(role, level=2)
+            doc.add_paragraph(msg['content'])
 
+        # 3. 把填好的 Word 文档打包成可以下载的数据流
+        bio = BytesIO()
+        doc.save(bio)
+
+        # 4. 召唤终极下载按钮
+        st.download_button(
+            label="📥 一键导出为 Word 文档 (.docx)",
+            data=bio.getvalue(),
+            file_name="GeekAI_学术笔记.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            help="纯正的 Word 格式！"
+        )
 # 处理可视化炫技逻辑
 if st.session_state.get("show_chart", False):
     st.subheader("📈 模拟实时全球算力监控 (动态生成)")
