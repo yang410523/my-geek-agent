@@ -1,3 +1,4 @@
 google-cloud-aiplatform
 plotly
 pandas
+python-docx
