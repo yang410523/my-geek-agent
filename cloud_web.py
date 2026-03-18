@@ -62,6 +62,24 @@ with st.sidebar:
         st.session_state.show_chart = True
     
     if st.button("🧹 清空当前对话"):
+        st.markdown("---")
+    st.subheader("💾 学术资产保护")
+    
+    # 将对话记录打包成文科生最爱的 Markdown 格式
+    if st.session_state.messages:
+        chat_export = "# 🌌 Geek AI 学术探讨记录\n\n"
+        for msg in st.session_state.messages:
+            role = "🧑‍🎓 你" if msg["role"] == "user" else "🤖 AI 助理"
+            chat_export += f"### {role}:\n{msg['content']}\n\n---\n"
+            
+        # 召唤下载按钮
+        st.download_button(
+            label="📥 一键导出本次文献分析笔记",
+            data=chat_export,
+            file_name="GeekAI_学术笔记.md",
+            mime="text/markdown",
+            help="关网页前记得点我！否则记忆会清空哦！"
+        )
         st.session_state.messages = []
         st.session_state.show_chart = False
         st.rerun()
