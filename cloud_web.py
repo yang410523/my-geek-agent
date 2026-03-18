@@ -68,7 +68,7 @@ with st.sidebar:
     st.subheader("💾 学术资产保护")
 
     # 极客大招：直接在内存里生成原生的 Word 文档！
-    if st.session_state.messages:
+    if "messages" in st.session_state and st.session_state.messages:
         # 1. 创建一个虚拟的 Word 文档
         doc = Document()
         doc.add_heading('🌌 Geek AI 学术探讨记录', 0)
