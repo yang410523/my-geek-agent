@@ -7,17 +7,23 @@ import vertexai
 from vertexai.generative_models import GenerativeModel
 
 # ================= 1. 物理挂载核弹钥匙 =================
-# 确保这个 json 文件和当前代码在同一个文件夹！
 KEY_PATH = "vertex-key.json"
+
+# 【极客新增：云端自动锻造钥匙】
+# 如果是在云服务器上，物理文件不存在，我们就从保险箱里把文本拿出来，当场写一个文件！
+if not os.path.exists(KEY_PATH):
+    with open(KEY_PATH, "w") as f:
+        f.write(st.secrets["GOOGLE_JSON"])
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_PATH
 
-# 极客操作：自动从密钥文件里提取 Project ID，省去手动配置的麻烦
+# 自动提取 Project ID
 try:
     with open(KEY_PATH, "r") as f:
         key_data = json.load(f)
         PROJECT_ID = key_data["project_id"]
-except FileNotFoundError:
-    st.error("🚨 致命错误：找不到 vertex-key.json！请确认文件路径。")
+except Exception as e:
+    st.error(f"🚨 致命错误：读取密钥失败！请检查 Secrets 配置。错误信息: {e}")
     st.stop()
 
 # 点火：初始化谷歌云 Vertex AI 引擎
