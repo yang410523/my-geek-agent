@@ -34,6 +34,18 @@ model = GenerativeModel("gemini-2.5-pro")
 
 # ================= 2. 赛博朋克前端装潢 (CSS 注入) =================
 st.set_page_config(page_title="Geek AI 核心控制台", page_icon="🌌", layout="wide")
+# ================= 🚨 赛博防盗门 (授权验证) =================
+st.sidebar.subheader("🔐 系统授权验证")
+# 让用户输入密码，输入的内容会变成小黑点
+user_pwd = st.sidebar.text_input("请输入指挥官访问密钥：", type="password")
+
+# 检查密码对不对（从云端保险箱里读取真正的密码）
+if user_pwd != st.secrets["APP_PWD"]:
+    st.warning("⚠️ 警告：未授权访问！机甲核心已锁定。请输入正确的密钥。")
+    st.stop()  # 绝杀指令：只要密码不对，网页后面的所有代码全部停止运行！
+
+st.sidebar.success("✅ 验证通过！欢迎登舰。")
+# ==========================================================
 
 # 强制注入暗黑极客风 CSS
 st.markdown("""
