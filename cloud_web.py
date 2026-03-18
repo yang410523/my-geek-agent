@@ -28,8 +28,8 @@ except Exception as e:
 
 # 点火：初始化谷歌云 Vertex AI 引擎
 vertexai.init(project=PROJECT_ID, location="us-central1")
-# 召唤最强性价比/速度的 Gemini 1.5 Flash 大模型
-model = GenerativeModel("gemini-1.5-flash-002")
+# 召唤最强性价比/速度的 Gemini 3。1 大模型
+model = GenerativeModel("gemini-3.1-pro-preview")
 
 # ================= 2. 赛博朋克前端装潢 (CSS 注入) =================
 st.set_page_config(page_title="Geek AI 核心控制台", page_icon="🌌", layout="wide")
@@ -46,7 +46,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🌌 Geek AI 云端控制台 (Vertex 引擎)")
-st.caption("⚡ 算力核心: Gemini 1.5 Flash | 状态: 300刀 API 全功率输出 | 密级: 最高")
+st.caption("⚡ 算力核心: Gemini 3.1 Pro | 状态: 300刀 API 全功率输出 | 密级: 最高")
 
 # ================= 3. 炫技控制台 (数据可视化) =================
 with st.sidebar:
